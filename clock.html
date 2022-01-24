@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clock</title>
+    <link rel="stylesheet" href="clock.css">
+</head>
+<body onload="clockWork()">
+    <header>
+        <p id="logo">Clock</p>
+        <nav>
+                <li><button class="but" onclick="clockWork()" >Clock</button></li>
+                <li><button class="but" onclick="stopWatch.stopWatchWork()">Stopwatch</button></li>
+                <li><button class="but" onclick="alarm.alarmWork()">Alarm</button></li>
+        </nav>
+    </header>
+    <section class="clock">
+        <!-- <h1 id="time"></h1>
+        <h3 id="date"></h3> -->
+    </section>
+    <script>
+
+        var interId=null;
+        //function toi remove elements from section
+        function removeNodes(){
+            //removing all child node in the section
+            let parent=document.getElementsByTagName('section')[0];
+            console.log(parent.firstChild+" first child");
+            while(parent.firstChild){
+                parent.removeChild(parent.firstChild);
+            }
+        }
+        //function for clock
+        function clockWork(){
+            console.log("clock is working");
+
+            clearInterval(interId);
+            removeNodes();
+            let eleh1=document.createElement('h1');
+                eleh1.id="time";
+            let eleh3=document.createElement('h3');
+                eleh3.id="date";
+            console.log(eleh1+" "+eleh3+" "+document.getElementsByClassName('clock'));
+            let sec=document.getElementsByClassName('clock')[0];
+            sec.appendChild(eleh1);
+            sec.appendChild(eleh3);
+            interId=setInterval(() => {
+                let t=new Date();
+            let time='Curent Time is : '+t.getHours()+':'+t.getMinutes()+':'+t.getSeconds();
+            let date='Todays Date is :'+t.getDate()+'/'+(t.getMonth()+1)+'/'+t.getFullYear();
+        document.getElementById('time').innerHTML=time;
+        document.getElementById('date').innerHTML=date;
+            }, 1000);    
+    
+        }
+
+        //alarm methods
+        var audio = new Audio('https://pl3dxz-a.akamaihd.net/downloads/ringtones/files/mp3/krishnaflu-pa2luqdy-37180.mp3');
+        let alarm={
+        alarmWork:function(){
+            clockWork();
+            console.log("alarm working");
+            let selHour=document.createElement('select');
+            selHour.setAttribute('id','hour');
+            //inserting hours in combo box
+            for(let i=0;i<24;i++){
+                let op=document.createElement('option');
+                op.setAttribute('value',`${i}`);
+                op.innerHTML=i;
+                
+                selHour.appendChild(op);
+            }
+            let lab1=document.createElement('label');
+            lab1.setAttribute('for','hour');
+            lab1.innerHTML="Hour";
+            document.getElementsByClassName('clock')[0].appendChild(lab1);
+            document.getElementsByClassName('clock')[0].appendChild(selHour);
+            //creating document for minute
+            let selMin=document.createElement('select');
+            selMin.setAttribute('id','min');
+            //inserting hours in combo box
+            for(let i=0;i<60;i++){
+                let op=document.createElement('option');
+                op.setAttribute('value',`${i}`);
+                op.innerHTML=i;
+                selMin.appendChild(op);
+            }
+            let lab2=document.createElement('label');
+            lab2.setAttribute('for','min');
+            lab2.innerHTML="Minute";
+            document.getElementsByClassName('clock')[0].appendChild(lab2);
+            document.getElementsByClassName('clock')[0].appendChild(selMin);
+            
+            // //am/pm
+            // let ampm=document.createElement('select');
+            // ampm.setAttribute('id','ampm');
+            // let am=document.createElement('option');
+            // am.setAttribute('value','am');
+            // am.innerHTML='am';
+            // let pm=document.createElement('option');
+            // pm.setAttribute('value','pm');
+            // pm.innerHTML='pm';
+            // ampm.appendChild(am);
+            // ampm.appendChild(pm);
+            // document.getElementsByClassName('clock')[0].appendChild(ampm);
+            let but=document.createElement('button');
+            but.setAttribute('onclick','alarm.setAlarm()');
+            but.innerHTML="Set Alarm";
+            document.getElementsByClassName('clock')[0].appendChild(but);
+        },//end of alarmwork
+
+        setAlarm:function(){
+            console.log("set alarm run");
+        //     let alarmInter=setInterval(() => {
+            let hour=document.getElementById('hour').value;
+            let min=document.getElementById('min').value;
+           let t=new Date();
+        //     if(hour==t.getHours() && min==t.getMinutes()){
+        //         var audio = new Audio('https://pl3dxz-a.akamaihd.net/downloads/ringtones/files/mp3/krishnaflu-pa2luqdy-37180.mp3');
+        //         audio.play();  
+        //         console.log("audio is playing");
+        //         clearInterval(alarmInter);
+        //     }
+        // }, 1);
+        
+            if(alarmInter!=undefined) return;
+            let timeout=this.getTimeout(hour,min);
+            console.log("timeout in millsec"+timeout);
+         var alarmInter= setTimeout(() => {
+                let head2=document.createElement('h2');
+                head2.setAttribute('class','msg');
+                head2.innerHTML="Alarm is ringing...";
+                document.getElementsByClassName('clock')[0].appendChild(head2);
+                audio.play();  
+                 console.log("audio is playing");
+                
+        },timeout);
+        
+        audio.addEventListener("ended",()=> {
+            clearTimeout(alarmInter);
+            if(document.getElementsByClassName('msg')[0])
+                   document.getElementsByClassName('msg')[0].remove();
+                })
+
+        },
+        getTimeout:function(hour,min){
+            console.log("hour="+ Number(hour)+" min="+ Number(min));
+            let t=new Date();
+            // converting given time in minutes
+            let val1=(t.getHours()*60)+t.getMinutes();
+            let val2=(Number(hour)*60)+Number(min);
+            console.log("val1="+val1+" val2="+val2);
+            if(val1>val2){
+                val2=(24*60)+val2;
+                console.log("val2 after sub 24 :"+val2);
+            }
+
+            getTOmin=val2-val1;
+            getTOsec=getTOmin*60;
+            console.log("remaining minutes"+getTOmin);
+            return getTOsec*1000;
+        },
+        hourToMinute:function(time){
+            return time*60;
+        }
+    };
+        //object of stopwatch
+        let stopWatch={
+            hour:0,
+             min:0,
+            sec:0,
+             milli:0,
+        //function for stopwatch
+        stopWatchWork:function(){
+            console.log("stopwatch is working");
+            //stopping setinterval of clockWork
+            clearInterval(interId);
+            removeNodes();
+            let heading=document.createElement('h1');
+            heading.id="time";
+            //generating start button
+            let startBut=document.createElement('button');
+            startBut.setAttribute('onclick','stopWatch.start()');
+            startBut.innerHTML="Start";
+            //generating stop button
+            let stopBut=document.createElement('button');
+            stopBut.setAttribute('onclick','stopWatch.stop()');
+            stopBut.innerHTML="stop";
+            //generating reset button
+            let resetBut=document.createElement('button');
+            resetBut.setAttribute('onclick','stopWatch.stopWatchWork()');
+            resetBut.innerHTML="Reset";
+            let sec=document.getElementsByClassName('clock')[0];
+            //appending all the elements
+            sec.appendChild(heading);
+            sec.appendChild(startBut);
+            sec.appendChild(stopBut);
+            sec.appendChild(resetBut);
+            this.hour=0;
+            this.min=0;
+            this.sec=0;
+            this.milli=0;
+            document.getElementById('time').innerHTML="00:00:00:0000";
+        },
+        //start function of stopwatch
+        start:function(){
+
+            //when we call it two times thant the interId updated and for the previous start call it remains executed it wont stop because we lost the interId data for that so first we clear interval
+            clearInterval(interId);
+
+           interId= setInterval(() => {
+                this.milli++;
+                if(this.milli==300) {
+                    this.sec++;
+                    this.milli=0;
+                }
+                if(this.sec==60){
+                    this.min++;
+                    this.sec=0;
+                }
+                if(this.min==60){
+                    this.hour++;
+                    this.min=0;
+                }
+                document.getElementById('time').innerHTML=this.hour+':'+this.min+':'+this.sec+':'+this.milli;
+            }, 1);
+        },
+
+        //stopping stop watch
+        stop:function(){
+            clearInterval(interId);
+        }
+    };
+        
+    </script>
+</body>
+</html>

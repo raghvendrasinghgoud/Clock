@@ -1,0 +1,82 @@
+*{
+    margin: 0px;
+    padding: 0px;
+}
+body{
+    background-color: aliceblue;
+}
+header{
+    background-color: rgb(94, 143, 15);
+}
+#logo{
+    font-size: 40px;
+    font-style:italic;
+    font-weight: bolder;
+    font-stretch: extra-expanded;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    color: rgb(212, 31, 85);
+    display: inline;
+    margin: auto 7%;
+    text-shadow: 40px;
+}
+nav{
+    display: inline; 
+    float: right;
+    margin-right: 7%;
+    text-decoration: none;
+}
+li{
+    display: inline;
+    margin: 10px;
+}
+.but{
+    background: none;
+    width: auto;
+    height: auto;
+    margin: auto;
+	color: whitesmoke;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+}
+button{
+    max-width:fit-content;
+    padding: 2px;
+    height: 30px;
+    background-color: rgb(187, 40, 60);
+    font-family:monospace;
+    font-weight: bolder;
+    margin:2px;
+}
+.but:hover{
+    color: rgb(194, 18, 18);
+}
+.clock{
+    position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+    padding: 10%;
+    background-color: aquamarine;
+}
+.msg{
+    color: red;
+}
+@media only screen and (max-width:400px){
+    nav{
+        display: block;
+        background-color: tomato;
+        float:right;
+    }
+
+    .clock{
+        position: fixed;
+      top: 65%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+        padding: 10%;
+        background-color: aquamarine;
+    }
+}
