@@ -64,7 +64,7 @@ button{
 .msg{
     color: red;
 }
-@media only screen and (max-width:400px){
+@media only screen and (max-width:500px){
     nav{
         display: block;
         background-color: tomato;
